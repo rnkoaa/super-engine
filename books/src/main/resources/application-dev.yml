@@ -1,0 +1,5 @@
+micronaut:
+  application:
+    name: books-dev
+  server:
+    port: 8081

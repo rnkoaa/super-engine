@@ -14,22 +14,41 @@ version = "0.0.1"
 group = "com.olive.books"
 
 dependencies {
+    kapt("io.micronaut:micronaut-http-validation")
+    implementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-jackson-databind")
     implementation("io.micronaut:micronaut-runtime")
+//    implementation("io.micronaut:management")
     implementation("io.micronaut.kafka:micronaut-kafka")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("jakarta.annotation:jakarta.annotation-api")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     runtimeOnly("ch.qos.logback:logback-classic")
-    implementation("io.micronaut:micronaut-validation")
-
-    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
-
-    testImplementation("io.micronaut:micronaut-http-client")
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:testcontainers")
+    implementation("io.micronaut:micronaut-validation")
+
+    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+//    implementation("io.micronaut:micronaut-jackson-databind")
+//    implementation("io.micronaut:micronaut-runtime")
+//    implementation("io.micronaut.kafka:micronaut-kafka")
+//    implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
+//    implementation("jakarta.annotation:jakarta.annotation-api")
+//    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+//    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+//    runtimeOnly("ch.qos.logback:logback-classic")
+//    implementation("io.micronaut:micronaut-validation")
+//
+//    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+//
+//    testImplementation("io.micronaut:micronaut-http-client")
+//    testImplementation("org.assertj:assertj-core")
+//    testImplementation("org.testcontainers:kafka")
+//    testImplementation("org.awaitility:awaitility:4.1.1")
+//    testImplementation("org.testcontainers:junit-jupiter")
+//    testImplementation("org.testcontainers:testcontainers")
 }
 
 application {
@@ -53,6 +72,7 @@ tasks {
 }
 
 micronaut {
+    runtime("netty")
     testRuntime("junit5")
     processing {
         incremental(true)
