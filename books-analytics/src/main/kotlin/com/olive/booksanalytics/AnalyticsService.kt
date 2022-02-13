@@ -9,7 +9,7 @@ class AnalyticsService {
     private val bookAnalytics: MutableMap<Book, Long> = ConcurrentHashMap()
 
     fun updateBookAnalytics(book: Book) {
-        bookAnalytics.compute(book) { k, v ->
+        bookAnalytics.compute(book) { _, v ->
             if (v == null) return@compute 1L else return@compute v + 1
         }
     }

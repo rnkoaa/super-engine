@@ -8,28 +8,24 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.client.exceptions.HttpClientResponseException
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.micronaut.test.support.TestPropertyProvider
 import jakarta.inject.Inject
-import org.junit.Ignore
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.testcontainers.containers.KafkaContainer
 import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.shaded.org.awaitility.Awaitility.await
 import org.testcontainers.utility.DockerImageName
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedDeque
 import java.util.concurrent.TimeUnit.SECONDS
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 
 //@Testcontainers
 //@MicronautTest
 //@TestInstance(PER_CLASS)
-@Ignore
+@Disabled
 class BookControllerTest : TestPropertyProvider {
 
     companion object {
