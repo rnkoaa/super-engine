@@ -1,0 +1,5 @@
+micronaut:
+  application:
+    name: book-analytics
+  server:
+    port: 8081
