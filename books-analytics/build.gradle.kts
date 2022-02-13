@@ -28,6 +28,8 @@ dependencies {
 
     testImplementation("io.micronaut:micronaut-http-client")
     testImplementation("org.assertj:assertj-core")
+    testImplementation("org.testcontainers:kafka")
+    testImplementation("org.awaitility:awaitility:4.1.1")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:testcontainers")
 }
@@ -53,6 +55,7 @@ tasks {
 }
 
 micronaut {
+    runtime("netty")
     testRuntime("junit5")
     processing {
         incremental(true)

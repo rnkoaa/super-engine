@@ -1,0 +1,10 @@
+micronaut:
+  application:
+    name: books
+  server:
+    port: 8080
+kafka.bootstrap.servers: localhost:9092
+netty:
+  default:
+    allocator:
+      max-order: 3

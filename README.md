@@ -3,7 +3,7 @@ Micronaut kafka Sample Application
 
 ### Kafka Setup
 
-Using this Repo to setup a One node Kafka Cluster using k-raft
+Using this Repo to set up a One node Kafka Cluster using k-raft
 
 [bashj79/kafka-kraft-docker](https://github.com/bashj79/kafka-kraft-docker)
 
@@ -12,9 +12,7 @@ Using this Repo to setup a One node Kafka Cluster using k-raft
 3. `docker build -t ${user}/kafka .`
 4. `docker run -d -p 9092:9092 ${user}/kafka`
 
-#### Build The Image
-
-
+Project Setup using [Micronaut Kafka tutorial](https://guides.micronaut.io/latest/micronaut-kafka-gradle-kotlin.html)
 
 ## Micronaut 3.3.1 Documentation
 
@@ -24,7 +22,9 @@ Using this Repo to setup a One node Kafka Cluster using k-raft
 - [Micronaut Guides](https://guides.micronaut.io/index.html)
 ---
 
-- [Shadow Gradle Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)## Feature testcontainers documentation
+- [Shadow Gradle Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)
+
+## Feature testcontainers documentation
 
 - [https://www.testcontainers.org/](https://www.testcontainers.org/)
 
