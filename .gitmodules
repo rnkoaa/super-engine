@@ -1,0 +1,3 @@
+[submodule "kafka-kraft-docker"]
+	path = kafka-kraft-docker
+	url = https://github.com/bashj79/kafka-kraft-docker
