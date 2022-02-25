@@ -1,4 +1,10 @@
+app:
+  db:
+    username: blahblahblah
 endpoints:
+  env:
+    enabled: true
+    sensitive: false
   info:
     enabled: true
     sensitive: false
@@ -7,10 +13,25 @@ micronaut:
     name: books
   server:
     port: 8080
+#kafka:
+#  bootstrap:
+#    servers: localhost:9092
+
 kafka:
-  bootstrap:
-    servers: localhost:9092
+  consumers:
+    default:
+      bootstrap.servers: "localhost:9092"
+  producers:
+    default:
+      bootstrap.servers: "localhost:9092"
 netty:
   default:
     allocator:
       max-order: 3
+
+team:
+  name: 'Steelers'
+  color: 'Black'
+  player-names:
+    - 'Mason Rudolph'
+    - 'James Connor'

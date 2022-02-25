@@ -12,6 +12,14 @@ Using this Repo to set up a One node Kafka Cluster using k-raft
 3. `docker build -t ${user}/kafka .`
 4. `docker run -d -p 9092:9092 ${user}/kafka`
 
+## Adding Additional properties from environment
+
+`MICRONAUT_CONFIG_FILES=books/external/configs/application.yml,books/external/secret/secret.yml`
+
+## Analyzing application properties
+
+`http :8080/env | jq -r '.propertySources[] | select(.name == "application")' `
+
 Project Setup using [Micronaut Kafka tutorial](https://guides.micronaut.io/latest/micronaut-kafka-gradle-kotlin.html)
 
 ## Micronaut 3.3.1 Documentation
