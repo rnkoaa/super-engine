@@ -26,36 +26,36 @@ services:
       - super-engine-network
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
-  cadvisor:
-    #    image: gcr.io/cadvisor/cadvisor:latest
-    image: cadvisor
-    build:
-      context: ./cadvisor
-    container_name: cadvisor
-    command: --raw_cgroup_prefix_whitelist=/docker/ --disable_metrics=hugetlb
-    privileged: true
-    ports:
-      - "8080:8080"
-    volumes:
-      - '/:/rootfs:ro'
-      - '/var/run:/var/run:ro'
-      - '/sys:/sys:ro'
-      - '/var/lib/docker/:/var/lib/docker:ro'
-      - '/dev/disk/:/dev/disk:ro'
-    restart: unless-stopped
-    depends_on:
-      - redis
-    networks:
-      - super-engine-network
-
-  redis:
-    image: redis:6
-    container_name: redis
-    ports:
-      - "6379:6379"
-    networks:
-      - super-engine-network
+#
+#  cadvisor:
+#    #    image: gcr.io/cadvisor/cadvisor:latest
+#    image: cadvisor
+#    build:
+#      context: ./cadvisor
+#    container_name: cadvisor
+#    command: --raw_cgroup_prefix_whitelist=/docker/ --disable_metrics=hugetlb
+#    privileged: true
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - '/:/rootfs:ro'
+#      - '/var/run:/var/run:ro'
+#      - '/sys:/sys:ro'
+#      - '/var/lib/docker/:/var/lib/docker:ro'
+#      - '/dev/disk/:/dev/disk:ro'
+#    restart: unless-stopped
+#    depends_on:
+#      - redis
+#    networks:
+#      - super-engine-network
+#
+#  redis:
+#    image: redis:6
+#    container_name: redis
+#    ports:
+#      - "6379:6379"
+#    networks:
+#      - super-engine-network
 
 networks:
   super-engine-network:
