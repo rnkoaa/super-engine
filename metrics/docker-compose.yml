@@ -1,0 +1,64 @@
+version: "3"
+
+services:
+  grafana:
+    image: "grafana/grafana:8.4.2"
+    container_name: grafana
+    networks:
+      - super-engine-network
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+  prometheus:
+    image: "prom/prometheus:v2.33.4"
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - cadvisor
+    networks:
+      - super-engine-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  cadvisor:
+    #    image: gcr.io/cadvisor/cadvisor:latest
+    image: cadvisor
+    build:
+      context: ./cadvisor
+    container_name: cadvisor
+    command: --raw_cgroup_prefix_whitelist=/docker/ --disable_metrics=hugetlb
+    privileged: true
+    ports:
+      - "8080:8080"
+    volumes:
+      - '/:/rootfs:ro'
+      - '/var/run:/var/run:ro'
+      - '/sys:/sys:ro'
+      - '/var/lib/docker/:/var/lib/docker:ro'
+      - '/dev/disk/:/dev/disk:ro'
+    restart: unless-stopped
+    depends_on:
+      - redis
+    networks:
+      - super-engine-network
+
+  redis:
+    image: redis:6
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - super-engine-network
+
+networks:
+  super-engine-network:
+
+volumes:
+  grafana-storage:

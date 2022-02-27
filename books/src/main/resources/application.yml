@@ -2,6 +2,9 @@ app:
   db:
     username: blahblahblah
 endpoints:
+  prometheus:
+    sensitive: false
+    enabled: true
   env:
     enabled: true
     sensitive: false
@@ -11,19 +14,29 @@ endpoints:
 micronaut:
   application:
     name: books
+  metrics:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
   server:
-    port: 8080
+    port: 8081
 #kafka:
 #  bootstrap:
 #    servers: localhost:9092
 
 kafka:
-  consumers:
-    default:
-      bootstrap.servers: "localhost:9092"
-  producers:
-    default:
-      bootstrap.servers: "localhost:9092"
+  enabled: false
+
+#kafka:
+#  consumers:
+#    default:
+#      bootstrap.servers: "localhost:9092"
+#  producers:
+#    default:
+#      bootstrap.servers: "localhost:9092"
 netty:
   default:
     allocator:
