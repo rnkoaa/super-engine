@@ -31,3 +31,4 @@ rootProject.name = "super-engine"
 
 include(":books")
 include(":books-analytics")
+include("event")
