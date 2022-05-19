@@ -1,11 +1,14 @@
 package org.richard.event;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micronaut.configuration.kafka.ConsumerAware;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
 import io.micronaut.configuration.kafka.annotation.Topic;
 import io.micronaut.configuration.kafka.exceptions.KafkaListenerException;
 import io.micronaut.configuration.kafka.exceptions.KafkaListenerExceptionHandler;
 import jakarta.inject.Singleton;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -23,7 +26,19 @@ import org.apache.kafka.common.header.Header;
 public class KafkaEventProcessor implements ConsumerRebalanceListener, ConsumerAware<String, byte[]>,
     KafkaListenerExceptionHandler {
 
+    private final ObjectMapper objectMapper;
     private Consumer<String, byte[]> consumer;
+
+    private final KafkaDeadLetterEventPublisher deadLetterEventPublisher;
+    private final KafkaPoisonEventPublisher poisonEventPublisher;
+
+    public KafkaEventProcessor(ObjectMapper objectMapper,
+        KafkaDeadLetterEventPublisher deadLetterEventPublisher,
+        KafkaPoisonEventPublisher poisonEventPublisher) {
+        this.objectMapper = objectMapper;
+        this.deadLetterEventPublisher = deadLetterEventPublisher;
+        this.poisonEventPublisher = poisonEventPublisher;
+    }
 
     @Topic("${kafka.event.topic}")
     public void receive(ConsumerRecord<String, byte[]> records) throws Exception {
@@ -80,9 +95,25 @@ public class KafkaEventProcessor implements ConsumerRebalanceListener, ConsumerA
         if (consumerRecord.isPresent()) {
             @SuppressWarnings("unchecked")
             ConsumerRecord<String, byte[]> consumerRecord1 = (ConsumerRecord<String, byte[]>) consumerRecord.get();
+            byte[] value = consumerRecord1.value();
             System.out.println("Exception caught record [Key: " + consumerRecord1.key() + ", Record: "
-                + new String(consumerRecord1.value()) + "]");
+                + new String(value) + "]");
             System.out.println("Got Exception -> " + exception.getMessage());
+
+//            deadLetterEventPublisher.publish(consumerRecord1.key(),
+//                consumerRecord1.headers(), "");
+//            try {
+//                EventRecord eventRecord = deserialize(value);
+//                deadLetterEventPublisher.publish(
+//                    consumerRecord1.key(),
+//                    eventRecord.metadata.partitionKey(),
+//                    consumerRecord1.headers(),
+//                    (Event) eventRecord.event
+//                );
+//            } catch (IOException | ClassNotFoundException e) {
+//                throw new RuntimeException(e);
+//            }
+
             exception.getKafkaConsumer()
                 .commitSync(Collections.singletonMap(
                     new TopicPartition(consumerRecord1.topic(), consumerRecord1.partition()),
@@ -105,4 +136,37 @@ public class KafkaEventProcessor implements ConsumerRebalanceListener, ConsumerA
         }
         return rootCause;
     }
+
+    EventRecord deserialize(byte[] value) throws IOException, ClassNotFoundException {
+        JsonNode jsonNode = objectMapper.readTree(value);
+        String objectType = jsonNode.get("object_type").asText();
+        if (objectType == null || objectType.isEmpty()) {
+            return null;
+        }
+        Class<?> objectClass = Class.forName(objectType);
+        String data = jsonNode.get("data").asText();
+        if (data == null || data.isEmpty()) {
+            return null;
+        }
+
+        String metadataObject = jsonNode.get("metadata").asText();
+        if (metadataObject == null || metadataObject.isEmpty()) {
+            return null;
+        }
+
+        Metadata metadata = objectMapper.readValue(metadataObject, Metadata.class);
+        Object dataObject = objectMapper.readValue(data, objectClass);
+
+        return new EventRecord(
+            metadata, value, dataObject, objectClass, data
+        );
+    }
+
+    // Headers headers = consumeRecord.headers();
+    //				HashMap<String, Object> headerMap = new HashMap<>(8);
+    //				Iterator<Header> iterator = headers.iterator();
+    //				while (iterator.hasNext()) {
+    //					Header next = iterator.next();
+    //					headerMap.put(next.key(), serializer.deserialize(next.value()));
+    //				}
 }

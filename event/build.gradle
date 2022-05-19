@@ -1,21 +1,44 @@
 plugins {
     id 'java'
+    id("groovy")
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.3.2"
 }
 
-group 'org.example'
-version 'unspecified'
+group 'org.richard.event'
+version '0.0.1'
 //
-//repositories {
-//    mavenCentral()
-//}
 
 dependencies {
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("io.micronaut.kafka:micronaut-kafka")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut.kafka:micronaut-kafka")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    implementation("io.micronaut:micronaut-validation")
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
-test {
-    useJUnitPlatform()
+application {
+    mainClass.set("org.richard.event.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+graalvmNative.toolchainDetection.set(false)
+micronaut {
+    runtime("netty")
+    testRuntime("spock2")
+    processing {
+        incremental(true)
+        annotations("org.richard.event.*")
+    }
 }
 
 /*
@@ -45,21 +68,4 @@ dependencies {
 }
 
 
-application {
-    mainClass.set("org.richard.event.Application")
-}
-java {
-    sourceCompatibility = JavaVersion.toVersion("17")
-    targetCompatibility = JavaVersion.toVersion("17")
-}
-
-graalvmNative.toolchainDetection.set(false)
-micronaut {
-    runtime("netty")
-    testRuntime("spock2")
-    processing {
-        incremental(true)
-        annotations("org.richard.event.*")
-    }
-}
  */

@@ -15,6 +15,11 @@ kafka:
   producers:
     default:
       retries: 5
+      topic: event-stream
+    deadLetter:
+      topic: event-stream-dead-letter
+    poison:
+      topic: event-stream-poison
   consumers:
     event-stream:
       key:

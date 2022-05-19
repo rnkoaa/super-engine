@@ -1,14 +1,8 @@
 package org.richard.event;
 
-public class Metadata {
+public record Metadata(
+    String correlationId,
+    String partitionKey,
+    RetryPolicy retry) {
 
-    private final String correlationId;
-
-    public Metadata(String correlationId) {
-        this.correlationId = correlationId;
-    }
-
-    public String getCorrelationId() {
-        return correlationId;
-    }
 }

@@ -10,23 +10,23 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.header.Headers;
 
 @KafkaClient(
+    id = "poison",
     acks = KafkaClient.Acknowledge.ALL,
     properties = @Property(name = ProducerConfig.RETRIES_CONFIG, value = "5")
 )
-public interface KafkaEventPublisher {
+public interface KafkaPoisonEventPublisher {
 
-    @Topic("${kafka.producers.default.topic}")
+    @Topic("${kafka.producers.poison.topic}")
     <T> RecordMetadata publish(
         @KafkaKey String messageKey,
         Headers headers,
         Event<T> event);
 
-    @Topic("${kafka.producers.default.topic}")
+    @Topic("${kafka.producers.poison.topic}")
     <T> RecordMetadata publish(
         @KafkaKey String messageKey,
         @KafkaPartitionKey String partitionKey,
         Headers headers,
         Event<T> event);
-
 
 }
